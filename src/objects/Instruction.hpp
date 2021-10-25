@@ -11,10 +11,9 @@ Instructions for execution.
 class Instruction {
 private:
   objects::Script script;
-  objects::Shell  shell;
   std::string     out;
 public:
-  Instruction(const objects::Script& script, const objects::Shell& shell);
+  Instruction(const objects::Script& script);
 };
 
 }  // namespace objects
