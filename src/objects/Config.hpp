@@ -3,10 +3,8 @@
 namespace objects {
 
 /*
- - Insert
- - Normal
 */
-class Mode {
+class Config {
 };
 
 }  // namespace objects

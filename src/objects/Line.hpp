@@ -6,10 +6,8 @@ namespace objects {
 
 /*
 One line of text.
+ (UTF-8)
 */
-class Line {
-private:
-  std::string data_;
-};
+struct Line : public std::string {};
 
 }  // namespace objects
