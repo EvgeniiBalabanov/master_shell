@@ -3,8 +3,8 @@
 #include <iostream>
 #include <list>
 #include <iterator>
-
-#include "Action.hpp"
+#include <algorithm>
+#include "BasicAction.hpp"
 #include "Script.hpp"
 
 namespace objects {
@@ -18,39 +18,39 @@ public:
   void next(void) {
     if (cursor_ != data_.end()) {
       (*cursor_)->next();
-      cursor_++;
+      ++cursor_;
     }
   }
 
   void back(void) {
     if (cursor_ != data_.begin()) {
-      cursor_--;
+      --cursor_;
       (*cursor_)->back();
     }
   }
 
-  void add_event(std::shared_ptr<Action> action) {
+  template<typename TypeBasicAction, typename... Args>
+  void add_event(Args&&... args) {
+    std::shared_ptr<TypeBasicAction> BasicAction = std::make_shared<TypeBasicAction>(std::forward<Args>(args)...);
     if (cursor_ != data_.end()) {
-      std::list<std::shared_ptr<Action>>::iterator begin_erase = cursor_;
-      std::advance(cursor_, 1);
-      data_.erase(begin_erase, data_.end());
+      data_.erase(++decltype(cursor_)(cursor_), data_.end());
     }
-    action->next();
-    data_.push_back(std::move(action));
+    BasicAction->next();
+    data_.push_back(std::move(BasicAction));
   }
 
   std::ostream& operator<<(std::ostream& stream) const {
     stream << "history_cursor: { data: [ ";
-    for (const auto& action : data_) {
-      stream << "{ "<< *action << " }, ";
+    for (const auto& BasicAction : data_) {
+      stream << "{ "<< *BasicAction << " }, ";
     }
-    stream << "], cursor: " << std::distance<std::list<std::shared_ptr<Action>>::const_iterator>(data_.begin(), cursor_) << " } ";
+    stream << "], cursor: " << std::distance<std::list<std::shared_ptr<BasicAction>>::const_iterator>(data_.begin(), cursor_) << " } ";
     return stream;
   }
 
 private:
-  std::list<std::shared_ptr<Action>> data_;
-  std::list<std::shared_ptr<Action>>::iterator cursor_;
+  std::list<std::shared_ptr<BasicAction>> data_;
+  std::list<std::shared_ptr<BasicAction>>::iterator cursor_;
 };
 
 }  // namespace objects

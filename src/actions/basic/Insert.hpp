@@ -1,15 +1,15 @@
 #pragma once
 
-#include "Action.hpp"
+#include "BasicAction.hpp"
 
 namespace objects {
 
 /*
 Changing the script.
 */
-class Insert : public Action {
+class Insert : public BasicAction {
 public:
-  Insert(Script& script, bool reverse, const std::string& str) : Action(script, reverse), str_(str) {};
+  Insert(Script& script, bool reverse, const std::string& str) : BasicAction(script, reverse), str_(str) {};
   void next_implementation(void) const override final {
     script_.get_current_line().insert(script_.position_.xx_, str_);
     script_.position_.xx_ += str_.length();
@@ -36,7 +36,7 @@ public:
     }
   }
   Insert& operator=(const Insert& other) {
-    Action::operator=(other);
+    BasicAction::operator=(other);
     str_ = other.str_;
     return *this;
   }

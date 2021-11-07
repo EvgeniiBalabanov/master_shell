@@ -11,15 +11,16 @@ struct Script;
 /*
 Changing the script.
 */
-class Action {
+class BasicAction {
 public:
-  Action(Script& script, bool reverse = false) : script_(script), reverse_(reverse) {};
-  Action(Action&& other) : script_(other.script_), reverse_(other.reverse_) {};
-  Action& operator=(const Action& other) {
+  BasicAction(Script& script, bool reverse = false)
+    : script_(script), reverse_(reverse) {};
+  BasicAction(BasicAction&& other) : script_(other.script_), reverse_(other.reverse_) {};
+  BasicAction& operator=(const BasicAction& other) {
     reverse_ = other.reverse_;
     return *this;
   }
-  virtual ~Action() = default;
+  virtual ~BasicAction() = default;
   void next(void) const {
     if (reverse_ == false) {
       next_implementation();
@@ -45,6 +46,6 @@ protected:
 
 } // namespace objects
 
-std::ostream& operator<<(std::ostream& stream, const objects::Action& action) {
-  return action.operator<<(stream);
+std::ostream& operator<<(std::ostream& stream, const objects::BasicAction& BasicAction) {
+  return BasicAction.operator<<(stream);
 };
