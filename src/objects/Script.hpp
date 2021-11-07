@@ -21,15 +21,15 @@ struct Script {
   Position             position_;
   HistoryCursor        history_;
   Script() : data_({Line()}), position_{0, 0}, history_() {};
-  Line& get_line(size_t yy) {
+  Line& get_current_line(void) {
     auto iter = data_.begin();
-    std::advance(iter, yy);
+    std::advance(iter, position_.yy_);
     return *iter;
   }
   std::ostream& operator<<(std::ostream& stream) const {
     stream << "script : { data : [";
     for (const auto& line : data_) {
-      stream << line << ", ";
+      stream << "\"" << line << "\"" << ", ";
     }
     stream << "], " << position_ << ", " << history_ << "}";
     return stream;

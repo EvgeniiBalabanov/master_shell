@@ -15,6 +15,10 @@ class Action {
 public:
   Action(Script& script, bool reverse = false) : script_(script), reverse_(reverse) {};
   Action(Action&& other) : script_(other.script_), reverse_(other.reverse_) {};
+  Action& operator=(const Action& other) {
+    reverse_ = other.reverse_;
+    return *this;
+  }
   virtual ~Action() = default;
   void next(void) const {
     if (reverse_ == false) {

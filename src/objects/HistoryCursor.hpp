@@ -2,6 +2,8 @@
 
 #include <iostream>
 #include <list>
+#include <iterator>
+
 #include "Action.hpp"
 #include "Script.hpp"
 
@@ -22,8 +24,8 @@ public:
 
   void back(void) {
     if (cursor_ != data_.begin()) {
-      (*cursor_)->back();
       cursor_--;
+      (*cursor_)->back();
     }
   }
 
@@ -33,16 +35,16 @@ public:
       std::advance(cursor_, 1);
       data_.erase(begin_erase, data_.end());
     }
+    action->next();
     data_.push_back(std::move(action));
-    next();
   }
 
   std::ostream& operator<<(std::ostream& stream) const {
-    stream << "history_cursor: { data_: { ";
+    stream << "history_cursor: { data: [ ";
     for (const auto& action : data_) {
-      stream << *action << ", ";
+      stream << "{ "<< *action << " }, ";
     }
-    stream << "}, cursor_: NaN } ";
+    stream << "], cursor: " << std::distance<std::list<std::shared_ptr<Action>>::const_iterator>(data_.begin(), cursor_) << " } ";
     return stream;
   }
 

@@ -9,14 +9,14 @@ Changing the script.
 */
 class Move : public Action {
 public:
-  Move(const Script& script, bool reverse, long yy, long xx) : Action(script, reverse), yy_(yy), xx_(xx) {};
-  void next_implementation(void) override final const {
-    script_.yy_ += yy_;
-    script_.xx_ += xx_;
+  Move(Script& script, bool reverse, long yy, long xx) : Action(script, reverse), yy_(yy), xx_(xx) {};
+  void next_implementation(void) const override final {
+    script_.position_.yy_ += yy_;
+    script_.position_.xx_ += xx_;
   }
-  void back_implementation(void) override final const {
-    script_.yy_ -= yy_;
-    script_.xx_ -= xx_;
+  void back_implementation(void) const override final {
+    script_.position_.yy_ -= yy_;
+    script_.position_.xx_ -= xx_;
   }
   Move operator+(const Move& other) const {
     return Move(
@@ -26,7 +26,7 @@ public:
       xx_ + (other.reverse_ == reverse_ ? other.xx_ : -other.xx_));
   }
   Move& operator=(const Move& other) {
-    Action.operator=(this, other);
+    Action::operator=(other);
     yy_ = other.yy_;
     xx_ = other.xx_;
     return *this;
