@@ -31,18 +31,19 @@ public:
 
   template<typename TypeBasicAction, typename... Args>
   void add_event(Args&&... args) {
-    std::shared_ptr<TypeBasicAction> BasicAction = std::make_shared<TypeBasicAction>(std::forward<Args>(args)...);
+    std::shared_ptr<TypeBasicAction> action = std::make_shared<TypeBasicAction>(std::forward<Args>(args)...);
     if (cursor_ != data_.end()) {
-      data_.erase(++decltype(cursor_)(cursor_), data_.end());
+      data_.erase(cursor_, data_.end());
     }
-    BasicAction->next();
-    data_.push_back(std::move(BasicAction));
+    action->next();
+    data_.push_back(std::move(action));
+    cursor_ = data_.end();
   }
 
   std::ostream& operator<<(std::ostream& stream) const {
     stream << "history_cursor: { data: [ ";
-    for (const auto& BasicAction : data_) {
-      stream << "{ "<< *BasicAction << " }, ";
+    for (const auto& action : data_) {
+      stream << "{ "<< *action << " }, ";
     }
     stream << "], cursor: " << std::distance<std::list<std::shared_ptr<BasicAction>>::const_iterator>(data_.begin(), cursor_) << " } ";
     return stream;
